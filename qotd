@@ -1,20 +1,14 @@
 #!/bin/sh
 
-qod=${QOTD_CACHE:-${HOME}/.config/qod.json};
+qod="${QOTD_CACHE:-${HOME}/.config/qod.json}";
 apiKey="${QOTD_API_KEY}";
+dockerImage="${QOTD_IMAGE:-docker.io/mpepping/ponysay}";
 
 if [ "$1" = '--help' ] || [ "$1" = '-h' ]; then
     echo Show a quote of the day and embed it in a ponysay.
     echo Built with love for both tools.
     echo See https://github.com/jeroenboersma/qotd-ponysay for more information
     exit 1;
-fi
-
-if [ -z "${apiKey}" ]; then 
-    echo Grab yourself a api key and feed it to me.
-    echo https://theysaidso.com/user/subscriptions
-    echo export QOTD_API_KEY=[YOUR_API_KEY]
-    exit 2;
 fi
 
 if [ -n "`which podman`" ]; then
@@ -28,13 +22,21 @@ else
     exit 2;
 fi
 
-if [ ! -r ${qod} ] || [ $(find ${qod} -mtime +1 | wc -l) -gt 0 ]; then
+if [ ! -r "${qod}" ] || [ $(find "${qod}" -mtime +1 | wc -l) -gt 0 ]; then
     mkdir `dirname ${qod}`;
-    curl -H "X-TheySaidSo-Api-Secret: ${apiKey}" https://quotes.rest/qod.json > ${qod};
+ 
+    if [ -z "${apiKey}" ] && [ ! -r "${qod}" ]; then 
+        echo Grab yourself a api key and feed it to me.
+        echo https://theysaidso.com/user/subscriptions
+        echo export QOTD_API_KEY=[YOUR_API_KEY]
+        exit 2;
+    else
+        curl -H "X-TheySaidSo-Api-Secret: ${apiKey}" https://quotes.rest/qod.json > "${qod}";
+    fi
 fi
 
 clear;
-quote=`cat ${qod} | jq -r '.contents.quotes[0].quote'`;
+quote=$(cat "${qod}" | jq -r '.contents.quotes[0].quote');
 
-${containerized} run --rm -it docker.io/mpepping/ponysay "${quote}";
+"${containerized}" run --rm -it "${dockerImage}" "${quote}";
 
