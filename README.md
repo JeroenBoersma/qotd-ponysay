@@ -1,6 +1,8 @@
 # Quote of the Day <3 Ponysay
 Load the quote of the day and run it throught Ponysay.
 
+![Screenshot of a quote of the day wrapped in ponysay](screenshot.png)
+
 ## Prerequisities
 I think nowadays most of you will have all or one of the next available.
 
