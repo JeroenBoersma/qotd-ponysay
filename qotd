@@ -3,14 +3,14 @@
 qod=${QOTD_CACHE:-${HOME}/.config/qod.json};
 apiKey="${QOTD_API_KEY}";
 
-if [ "$1" == '--help' ] || [ "$1" == '-h' ]; then
+if [ "$1" = '--help' ] || [ "$1" = '-h' ]; then
     echo Show a quote of the day and embed it in a ponysay.
     echo Built with love for both tools.
     echo See https://github.com/jeroenboersma/qotd-ponysay for more information
     exit 1;
 fi
 
-if [ -Z "${apiKey}" ]; then 
+if [ -z "${apiKey}" ]; then 
     echo Grab yourself a api key and feed it to me.
     echo https://theysaidso.com/user/subscriptions
     echo export QOTD_API_KEY=[YOUR_API_KEY]
