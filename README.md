@@ -23,6 +23,9 @@ or combine
 QOTD_API_KEY="[YOURAPIKEYHERE]" qotd
 ```
 
+## Caching
+I write the quote to `~/.config/qod.json` so I don't bash the API all day.
+
 ## Special thanks
 Thanks quotes.rest and Ponysay for making this possible <3
 
