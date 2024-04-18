@@ -28,6 +28,13 @@ QOTD_API_KEY="[YOURAPIKEYHERE]" qotd
 ## Caching
 I write the quote to `~/.config/qod.json` so I don't bash the API all day.
 
+## Config
+You can export variables to change the behavior.
+
+1. `QOTD_CACHE` (default `/.config/qod.json`) if you want to store the cache somewhere else.
+2. `QOTD_API_KEY` (default -, you must grab one) 
+3. `QOTD_IMAGE` (default `docker.io/mpepping/ponysay`) if you want to use another image.
+
 ## Special thanks
 Thanks quotes.rest and Ponysay for making this possible <3
 
