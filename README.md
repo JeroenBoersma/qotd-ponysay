@@ -28,6 +28,9 @@ QOTD_API_KEY="[YOURAPIKEYHERE]" qotd
 ## Caching
 I write the quote to `~/.config/qod.json` so I don't bash the API all day.
 
+## Options
+Run `--help|-h` to get some help or run `--force|-f` to force update the cache.
+
 ## Config
 You can export variables to change the behavior.
 
