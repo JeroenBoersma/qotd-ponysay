@@ -1,0 +1,24 @@
+#!/bin/sh
+
+qod=${QOTD_CACHE:-${HOME}/.config/qod.json};
+
+apiKey="${QOTD_API_KEY}";
+
+if [ -Z "${apiKey}" ]; then 
+    echo Grab yourself a api key and feed it to me.
+    echo https://theysaidso.com/user/subscriptions
+    echo export QOTD_API_KEY=[YOUR_API_KEY]
+    exit 1;
+fi
+
+if [ ! -r ${qod} ] || [ $(find ${qod} -mtime +1 | wc -l) -gt 0 ]; then
+    mkdir `dirname ${qod}`;
+    curl -H "X-TheySaidSo-Api-Secret: ${apiKey}" https://quotes.rest/qod.json > ${qod};
+fi
+
+clear;
+quote=`cat ${qod} | jq -r '.contents.quotes[0].quote'`;
+
+podman run --rm -it docker.io/mpepping/ponysay "${quote}";
+
+
