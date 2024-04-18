@@ -22,7 +22,7 @@ else
     exit 2;
 fi
 
-if [ ! -r "${qod}" ] || [ $(find "${qod}" -mtime +1 | wc -l) -gt 0 ]; then
+if [ "$1" = '--force' ] || [ "$1" = '-f' ] || [ ! -r "${qod}" ] || [ $(find "${qod}" -mtime +1 | wc -l) -gt 0 ]; then
     mkdir `dirname ${qod}`;
  
     if [ -z "${apiKey}" ] && [ ! -r "${qod}" ]; then 
