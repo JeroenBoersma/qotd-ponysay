@@ -1,14 +1,31 @@
 #!/bin/sh
 
 qod=${QOTD_CACHE:-${HOME}/.config/qod.json};
-
 apiKey="${QOTD_API_KEY}";
+
+if [ "$1" == '--help' ] || [ "$1" == '-h' ]; then
+    echo Show a quote of the day and embed it in a ponysay.
+    echo Built with love for both tools.
+    echo See https://github.com/jeroenboersma/qotd-ponysay for more information
+    exit 1;
+fi
 
 if [ -Z "${apiKey}" ]; then 
     echo Grab yourself a api key and feed it to me.
     echo https://theysaidso.com/user/subscriptions
     echo export QOTD_API_KEY=[YOUR_API_KEY]
-    exit 1;
+    exit 2;
+fi
+
+if [ -n "`which podman`" ]; then
+    containerized=podman;
+elif [ -n "`which docker`" ]; then
+    containerized=docker;
+else
+    echo I need at least podman or docker to run ponysay.
+    echo https://podman.io/
+    echo https://www.docker.com/
+    exit 2;
 fi
 
 if [ ! -r ${qod} ] || [ $(find ${qod} -mtime +1 | wc -l) -gt 0 ]; then
@@ -19,6 +36,5 @@ fi
 clear;
 quote=`cat ${qod} | jq -r '.contents.quotes[0].quote'`;
 
-podman run --rm -it docker.io/mpepping/ponysay "${quote}";
-
+${containerized} run --rm -it docker.io/mpepping/ponysay "${quote}";
 
