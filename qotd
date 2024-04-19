@@ -11,10 +11,18 @@ if [ "$1" = '--help' ] || [ "$1" = '-h' ]; then
     exit 1;
 fi
 
-if [ -n "`which podman`" ]; then
-    containerized=podman;
+if [ -n "`which ponysay`" ]; then
+    # native installation
+    doit=ponysay;
+elif [ -n "`which podman`" ]; then
+    # podman installation
+    doit="podman run --rm -it ${dockerImage}";
 elif [ -n "`which docker`" ]; then
-    containerized=docker;
+    # docker installation
+    doit="docker run --rm -it ${dockerImage}";
+elif [ -n "`which cowsay`" ]; then
+    # fallback on cowsay
+    doit=cowsay;
 else
     echo I need at least podman or docker to run ponysay.
     echo https://podman.io/
@@ -38,5 +46,5 @@ fi
 clear;
 quote=$(cat "${qod}" | jq -r '.contents.quotes[0].quote');
 
-"${containerized}" run --rm -it "${dockerImage}" "${quote}";
+${doit} "${quote}";
 
